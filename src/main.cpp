@@ -1,4 +1,5 @@
 #include <iostream>
+#include <chrono>
 #include <fstream>
 #include <sstream>
 #include <string>
@@ -14,6 +15,12 @@ char *fname;
 bool parse_args(int argc, char **argv);
 void usage(char **argv);
 
+uint8_t timer1 = 0,
+        timer2 = 0;
+
+using clk = std::chrono::system_clock;
+clk::time_point last_tick;
+
 int main(int argc, char **argv)
 {
     if (!parse_args(argc, argv)) return 0;
@@ -22,7 +29,16 @@ int main(int argc, char **argv)
     Screen screen(window_scale);
     screen.clear_screen();
     screen.refresh();
+
+    last_tick = clk::now();
+    std::chrono::milliseconds timer_interval(1000/60);
     while (screen.isOpen()) {
+        if (clk::now() <= last_tick + timer_interval) {
+            last_tick = clk::now();
+            if (timer1 > 0) timer1--;
+            if (timer2 > 0) timer2--;
+        }
+
         sf::Event evt;
         while (screen.pollEvent(evt)) {
             switch (evt.type) {
