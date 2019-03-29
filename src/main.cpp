@@ -13,13 +13,15 @@ int main(int argc, char **argv)
 {
     if (!parse_args(argc, argv)) return 0;
 
-    auto win = create_window(window_scale);
-    while (win->isOpen()) {
+    Screen screen(window_scale);
+    screen.clear_screen();
+    screen.refresh();
+    while (screen.isOpen()) {
         sf::Event evt;
-        while (win->pollEvent(evt)) {
+        while (screen.pollEvent(evt)) {
             switch (evt.type) {
                 case sf::Event::Closed:
-                    win->close();
+                    screen.close();
                     break;
                 default:
                     break;

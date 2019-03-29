@@ -3,10 +3,21 @@
 
 #include <SFML/Graphics.hpp>
 #include <memory>
+#include <vector>
 
 #define DEFAULT_WIN_SCALE 10
 #define WINDOW_NAME "CHIP-8"
 
-std::unique_ptr<sf::RenderWindow> create_window(unsigned window_scale);
+class Screen : public sf::RenderWindow {
+    private:
+        unsigned window_scale;
+        std::vector<sf::RectangleShape> pixels;
+
+    public:
+        Screen(unsigned window_scale);
+        void refresh();
+        void set_pixel(sf::Vector2u coord, bool on);
+        void clear_screen();
+};
 
 #endif
