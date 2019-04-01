@@ -2,7 +2,7 @@
 
 #include "memory.hpp"
 
-uint8_t memory[4096] = {0};
+uint8_t memory[0x1000] = {0};
 
 bool read_program(char *fname)
 {

@@ -1,4 +1,5 @@
 #include <iostream>
+#include <iomanip>
 #include <random>
 
 #include "cpu.hpp"
@@ -29,15 +30,16 @@ void exec_instruction(Screen *scr)
     switch (instr_h & 0xf0) {
         case 0x00:
             switch (instr_l) {
-                case 0xe0:  // RET
+                case 0xe0:  // CLS
+                    scr->clear_screen();
+                    break;
+                case 0xee:  // RET
                     pc = stack[sp];
                     sp--;
                     break;
-                case 0xee:  // CLS
-                    scr->clear_screen();
-                    break;
                 default:
                     nonrec = true;
+                    std::cerr << "A ";
                     break;
             }
             break;
@@ -188,5 +190,7 @@ void exec_instruction(Screen *scr)
             break;
     }
     if (nonrec)
-        std::cerr << "Non-recognized opcode at PC = 0x" << std::hex << _pc << " encountered: 0x" << std::hex << instr_h << std::hex << instr_l << std::endl;
+        std::cerr << "Non-recognized opcode at PC = 0x" << std::hex << std::setfill('0') << std::setw(4) << _pc
+            << " encountered: 0x" << std::hex << std::setfill('0') << std::setw(2) << (int)instr_h
+                                  << std::hex << std::setfill('0') << std::setw(2) << (int)instr_l << std::endl;
 }
