@@ -164,7 +164,7 @@ void exec_instruction(Screen *scr)
                     I += Vx[instr_h & 0x0f];
                     break;
                 case 0x29:  // LD F, Vx
-                    // TODO: implement
+                    I = FONT_ADDR + 5*Vx[instr_h & 0x0f];
                     break;
                 case 0x33:  // LD B, Vx
                     {
