@@ -7,7 +7,7 @@ INCDIR = inc
 OUTFILE = chip8
 
 OBJS = $(addsuffix .o, $(addprefix $(OBJDIR)/, \
-	  main video memory cpu timer \
+	  main video memory cpu timer input \
 	  ) )
 
 WARN = -Wall -Wextra -pedantic

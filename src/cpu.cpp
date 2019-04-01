@@ -5,6 +5,7 @@
 #include "cpu.hpp"
 #include "memory.hpp"
 #include "timer.hpp"
+#include "input.hpp"
 
 // Registers
 uint16_t    pc = 0x200;
@@ -146,10 +147,10 @@ void exec_instruction(Screen *scr)
         case 0xe0:
             switch (instr_l) {
                 case 0x9e:  // SKP
-                    // TODO: implement
+                    if (check_key(instr_h & 0x0f)) pc += 2;
                     break;
                 case 0xa1:  // SKPN
-                    // TODO: implement
+                    if (!check_key(instr_h & 0x0f)) pc += 2;
                     break;
                 default:
                     nonrec = true;
@@ -162,7 +163,7 @@ void exec_instruction(Screen *scr)
                     Vx[instr_h & 0x0f] = timer_delay;
                     break;
                 case 0x0a:  // LD Vx = K
-                    // TODO: implement
+                    Vx[instr_h & 0x0f] = poll_key();
                     break;
                 case 0x15:  // LD DT = Vx
                     timer_delay = Vx[instr_h & 0x0f];
