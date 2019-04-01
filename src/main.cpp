@@ -6,6 +6,7 @@
 
 #include <SFML/Graphics.hpp>
 
+#include "cpu.hpp"
 #include "video.hpp"
 #include "memory.hpp"
 
@@ -38,6 +39,8 @@ int main(int argc, char **argv)
             if (timer1 > 0) timer1--;
             if (timer2 > 0) timer2--;
         }
+
+        exec_instruction(&screen);
 
         sf::Event evt;
         while (screen.pollEvent(evt)) {
