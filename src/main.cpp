@@ -12,6 +12,8 @@
 
 unsigned window_scale = DEFAULT_WIN_SCALE;
 char *fname;
+static const double DEFAULT_CPU_FREQ = 1.0;
+double cpu_freq = DEFAULT_CPU_FREQ;
 
 bool parse_args(int argc, char **argv);
 void usage(char **argv);
@@ -20,7 +22,7 @@ uint8_t timer1 = 0,
         timer2 = 0;
 
 using clk = std::chrono::system_clock;
-clk::time_point last_tick;
+clk::time_point last_timer_tick;
 
 int main(int argc, char **argv)
 {
@@ -31,15 +33,14 @@ int main(int argc, char **argv)
     screen.clear_screen();
     screen.refresh();
 
-    last_tick = clk::now();
+    last_timer_tick = clk::now();
     std::chrono::milliseconds timer_interval(1000/60);
     while (screen.isOpen()) {
-        if (clk::now() <= last_tick + timer_interval) {
-            last_tick = clk::now();
+        if (clk::now() <= last_timer_tick + timer_interval) {
+            last_timer_tick = clk::now();
             if (timer1 > 0) timer1--;
             if (timer2 > 0) timer2--;
         }
-
         exec_instruction(&screen);
 
         sf::Event evt;
@@ -53,6 +54,7 @@ int main(int argc, char **argv)
             }
         }
 
+        sf::sleep(sf::microseconds(1000/cpu_freq));
     }
     return 0;
 }
@@ -74,6 +76,13 @@ bool parse_args(int argc, char **argv) {
             } catch (std::exception &e) {
             }
             if (window_scale < 1) window_scale = DEFAULT_WIN_SCALE;
+        } else if (arg == "-f" || arg == "--freq") {
+            i++;
+            try {
+                cpu_freq = std::stod(argv[i]);
+            } catch (std::exception &e) {
+            }
+            if (window_scale < 1) window_scale = DEFAULT_WIN_SCALE;
         } else if (arg == "-h" || arg == "--help") {
             usage(argv);
             return false;
@@ -85,6 +94,7 @@ bool parse_args(int argc, char **argv) {
 void usage(char **argv) {
     std::cout << "Usage: " << argv[0] << " [OPTION]... FILE" << std::endl;
     std::cout << "Open and execute FILE." << std::endl;
+    std::cout << "\t-f NUM, --freq NUM\tSet the CPU frequency. (in kHz, default: " << DEFAULT_CPU_FREQ << ")" << std::endl;
     std::cout << "\t-s NUM, --scale NUM\tScale the window resolution by NUM. (Default: " << DEFAULT_WIN_SCALE << ")" << std::endl;
     std::cout << "\t-h, --help\t\tShow this help." << std::endl;
 

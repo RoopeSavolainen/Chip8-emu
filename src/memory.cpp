@@ -2,6 +2,8 @@
 
 #include "memory.hpp"
 
+uint8_t memory[4096] = {0};
+
 bool read_program(char *fname)
 {
     FILE *f = fopen(fname, "r");

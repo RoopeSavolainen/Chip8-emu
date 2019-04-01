@@ -2,7 +2,6 @@
 #define VIDEO_HPP
 
 #include <SFML/Graphics.hpp>
-#include <memory>
 #include <vector>
 
 #define DEFAULT_WIN_SCALE 10

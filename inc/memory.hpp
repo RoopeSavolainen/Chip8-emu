@@ -3,7 +3,7 @@
 
 #include <cinttypes>
 
-static uint8_t memory[0x1000];
+extern uint8_t memory[0x1000];
 
 bool read_program(char *fname);
 
