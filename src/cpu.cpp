@@ -3,6 +3,7 @@
 
 #include "cpu.hpp"
 #include "memory.hpp"
+#include "timer.hpp"
 
 // Registers
 uint16_t    pc = 0x200;
@@ -146,16 +147,16 @@ void exec_instruction(Screen *scr)
         case 0xf0:
             switch (instr_l) {
                 case 0x07:  // LD Vx = DT
-                    // TODO: implement
+                    Vx[instr_h & 0x0f] = timer_delay;
                     break;
                 case 0x0a:  // LD Vx = K
                     // TODO: implement
                     break;
                 case 0x15:  // LD DT = Vx
-                    // TODO: implement
+                    timer_delay = Vx[instr_h & 0x0f];
                     break;
                 case 0x18:  // LD ST = Vx
-                    // TODO: implement
+                    timer_sound = Vx[instr_h & 0x0f];
                     break;
                 case 0x1e:  // ADD I, Vx
                     I += Vx[instr_h & 0x0f];

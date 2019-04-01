@@ -9,6 +9,7 @@
 #include "cpu.hpp"
 #include "video.hpp"
 #include "memory.hpp"
+#include "timer.hpp"
 
 unsigned window_scale = DEFAULT_WIN_SCALE;
 char *fname;
@@ -17,9 +18,6 @@ double cpu_freq = DEFAULT_CPU_FREQ;
 
 bool parse_args(int argc, char **argv);
 void usage(char **argv);
-
-uint8_t timer1 = 0,
-        timer2 = 0;
 
 using clk = std::chrono::system_clock;
 clk::time_point last_timer_tick;
@@ -38,8 +36,8 @@ int main(int argc, char **argv)
     while (screen.isOpen()) {
         if (clk::now() <= last_timer_tick + timer_interval) {
             last_timer_tick = clk::now();
-            if (timer1 > 0) timer1--;
-            if (timer2 > 0) timer2--;
+            if (timer_delay > 0) timer_delay--;
+            if (timer_sound > 0) timer_sound--;
         }
         exec_instruction(&screen);
 
