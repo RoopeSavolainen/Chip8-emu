@@ -131,7 +131,17 @@ void exec_instruction(Screen *scr)
             Vx[instr_h & 0x0f] = dstr(rng) & instr_l;
             break;
         case 0xd0:  // DRW
-            // TODO: implement
+            {
+                bool erased = false;
+                for (uint8_t y = 0; y < (instr_l & 0x0f); y++) {
+                    uint8_t val = memory[I+y];
+                    for (uint8_t x = 0; x < 8; x++)
+                        if (val & (0x80 >> x))
+                            if (scr->toggle_pixel(sf::Vector2u(Vx[instr_h & 0x0f] + x, Vx[(instr_l & 0xf0) >> 4] + y)))
+                                erased = true;
+                }
+                Vx[0xf] = erased ? 1 : 0;
+            }
             break;
         case 0xe0:
             switch (instr_l) {

@@ -15,7 +15,7 @@ class Screen : public sf::RenderWindow {
     public:
         Screen(unsigned window_scale);
         void refresh();
-        void set_pixel(sf::Vector2u coord, bool on);
+        bool toggle_pixel(sf::Vector2u coord);
         void clear_screen();
 };
 

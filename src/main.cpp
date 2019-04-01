@@ -40,6 +40,7 @@ int main(int argc, char **argv)
             if (timer_sound > 0) timer_sound--;
         }
         exec_instruction(&screen);
+        screen.refresh();
 
         sf::Event evt;
         while (screen.pollEvent(evt)) {
@@ -64,8 +65,11 @@ bool parse_args(int argc, char **argv) {
     }
     for (int i = 1; i < argc; i++) {
         std::string arg = std::string(argv[i]);
-
-        if (i == argc - 1) {
+        
+        if (arg == "-h" || arg == "--help") {
+            usage(argv);
+            return false;
+        } else if (i == argc - 1) {
             fname = argv[i];
         } else if (arg == "-s" || arg == "--scale") {
             i++;
@@ -80,10 +84,6 @@ bool parse_args(int argc, char **argv) {
                 cpu_freq = std::stod(argv[i]);
             } catch (std::exception &e) {
             }
-            if (window_scale < 1) window_scale = DEFAULT_WIN_SCALE;
-        } else if (arg == "-h" || arg == "--help") {
-            usage(argv);
-            return false;
         }
     }
     return true;
@@ -95,5 +95,4 @@ void usage(char **argv) {
     std::cout << "\t-f NUM, --freq NUM\tSet the CPU frequency. (in kHz, default: " << DEFAULT_CPU_FREQ << ")" << std::endl;
     std::cout << "\t-s NUM, --scale NUM\tScale the window resolution by NUM. (Default: " << DEFAULT_WIN_SCALE << ")" << std::endl;
     std::cout << "\t-h, --help\t\tShow this help." << std::endl;
-
 }

@@ -28,14 +28,22 @@ void Screen::refresh()
     display();
 }
 
-void Screen::set_pixel(sf::Vector2u coord, bool on)
+#include <iostream>
+bool Screen::toggle_pixel(sf::Vector2u coord)
 {
-    pixels[coord.y*64 + coord.x].setFillColor(on ? sf::Color::Black : sf::Color::White);
+    auto pixel = &pixels[coord.y*64 + (coord.x % 64)];
+    if (pixel->getFillColor() == sf::Color::Black) {
+        pixel->setFillColor(sf::Color::White);
+        return true;
+    } else {
+        pixel->setFillColor(sf::Color::Black);
+        return false;
+    }
 }
 
 void Screen::clear_screen()
 {
     for (unsigned y = 0; y < 32; y++)
         for (unsigned x = 0; x < 64; x++)
-            set_pixel(sf::Vector2u(x,y), false);
+            pixels[y*64 + x].setFillColor(sf::Color::White);
 }
